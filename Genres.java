@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Genres {
     public static void main(String[] args) {
@@ -16,21 +18,22 @@ public class Genres {
             System.out.println(data);
         }
     }
-    public static String[] fetchData(String uname) {
+    public static Map<String, Integer> fetchData(String uname) {
+
+        Map<String, Integer> myMap = new HashMap<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null; 
         
 
         String url = "jdbc:sqlite:UserInput.db";
-        ArrayList<String> dataList = new ArrayList<>();
-        dataList.add(uname);
+        myMap.put(uname, 0);
         try (Connection connection = DriverManager.getConnection(url)) {
             String sql = "SELECT UserName FROM Input WHERE UserName = ?";
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
-            while (resultSet.next() && dataList.size() < 7) {
+            while (resultSet.next() && myMap.size() < 7) {
                 String value = resultSet.getString("genre");
-                dataList.add(value);
+                myMap.add(value);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,6 +47,6 @@ public class Genres {
                 e.printStackTrace();
             }
         }
-        return dataList.toArray(new String[0]);
+        return myMap.toArray(new String[0]);
     }
 }
