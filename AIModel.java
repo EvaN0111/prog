@@ -23,7 +23,7 @@ public class AIModel {
         ChatLanguageModel model = OpenAiChatModel.withApiKey(apikey);
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO));
         
-        UserMessage userMessage = new UserMessage("can you generate a playlist with 10 "+ in_g +" songs from the "+ in_d +"'s for "+ in_oc+ "?");
+        UserMessage userMessage = new UserMessage("generate a playlist with 10 "+ in_g +" songs from the "+ in_d +"'s for "+ in_oc);
         
         AiMessage answer = model.generate(chatMemory.messages()).content();
         return answer;
@@ -52,8 +52,9 @@ public class AIModel {
         return genList;
     }
 
-    public void manageMemory(ChatMessage a) {
-        chatMemory.add(a);
+    public void manageMemory(String a) {
+        AiMessage aimessage = AiMessage.from(ChatMessage.systemMessage(a)); 
+        chatMemory.add(aimessage);
     }
 }
 
