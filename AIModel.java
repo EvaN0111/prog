@@ -19,42 +19,53 @@ public class AIModel {
     public ChatMemory chatMemory;
     String apikey = System.getenv("API_KEY");
     public AiMessage genAnswer(String in_g, String in_oc, String in_d ) {
-
-        ChatLanguageModel model = OpenAiChatModel.withApiKey(apikey);
-        ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO));
-        
-        UserMessage userMessage = new UserMessage("generate a playlist with 10 "+ in_g +" songs from the "+ in_d +"'s for "+ in_oc);
-        
-        AiMessage answer = model.generate(chatMemory.messages()).content();
-        return answer;
+        try {
+            ChatLanguageModel model = OpenAiChatModel.withApiKey(apikey);
+            ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO));
+            
+            UserMessage userMessage = new UserMessage("generate a playlist with 10 "+ in_g +" songs from the "+ in_d +"'s for "+ in_oc);
+            
+            AiMessage answer = model.generate(chatMemory.messages()).content();
+            return answer;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String modify(String genList) {
-        genList =  genList.replaceAll("\\.\\s+", ".");
-    
-        int z = 0;
-        for (int i = 0; i < genList.length() - 1; i++) {
-            char current = genList.charAt(i);
-            char next = genList.charAt(i+1);
-            
-            //case where num 10 is in the prologue
-            if ((current == '1') && (next == '0') && (z==0)) {
-                z = z + 1;
-                genList = genList.substring(current , genList.length() );
+        try {
+            genList =  genList.replaceAll("\\.\\s+", ".");
+        
+            int z = 0;
+            for (int i = 0; i < genList.length() - 1; i++) {
+                char current = genList.charAt(i);
+                char next = genList.charAt(i+1);
                 
-            // case of the 1.song
-            } else if ((current == '1') && (next == '.') && (z !=0 )) {
-                genList = genList.substring(current-1, genList.length());   
+                //case where num 10 is in the prologue
+                if ((current == '1') && (next == '0') && (z==0)) {
+                    z = z + 1;
+                    genList = genList.substring(current , genList.length() );
+                    
+                // case of the 1.song
+                } else if ((current == '1') && (next == '.') && (z !=0 )) {
+                    genList = genList.substring(current-1, genList.length());   
+                }
             }
+            //return the final list
+            genList = genList.replace(" ", "\n");
+            return genList;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        //return the final list
-        genList = genList.replace(" ", "\n");
-        return genList;
     }
 
     public void manageMemory(String a) {
-        AiMessage aimessage = AiMessage.from(ChatMessage.systemMessage(a)); 
-        chatMemory.add(aimessage);
+        try {
+            AiMessage aimessage = AiMessage.from(ChatMessage.systemMessage(a)); 
+            chatMemory.add(aimessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
