@@ -150,10 +150,10 @@ public class Main {
                     //Save the selected genre in the database and increase the appropriate counter by 1.
 
                     //Pass the data to the AI and display the suggested playlist.
-                    AIModel openai = new AIModel(/*input*/);
+                    AIModel openai = new AIModel();
                     String genlist = openai.genAnswer(gn, mood, dec);
                     genlist = openai.modify(genlist);                    
-                    openai.manageMemory(genlist);   
+                    openai.manageMemory(genlist);
 
                     //Store the playlist in the history table.
 

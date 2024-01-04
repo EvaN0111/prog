@@ -18,7 +18,7 @@ import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 public class AIModel {
     public ChatMemory chatMemory;
     String apikey = System.getenv("API_KEY");
-    public AiMessage genAnswer(String in_g, String in_oc, String in_d ) {
+    public String genAnswer(String in_g, String in_oc, String in_d ) {
         try {
             ChatLanguageModel model = OpenAiChatModel.withApiKey(apikey);
             ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO));
@@ -26,7 +26,7 @@ public class AIModel {
             UserMessage userMessage = new UserMessage("generate a playlist with 10 "+ in_g +" songs from the "+ in_d +"'s for "+ in_oc);
             
             AiMessage answer = model.generate(chatMemory.messages()).content();
-            return answer;
+            return answer.text();
         } catch (IOException e) {
             e.printStackTrace();
         }
