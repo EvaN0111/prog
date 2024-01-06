@@ -27,7 +27,7 @@ public class DB {
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Input (" +
                                "UserName VARCHAR(255) NOT NULL PRIMARY KEY," +
                                "Password VARCHAR(255) NOT NULL," +
-                               "Fullname VARCHAR(255) NOT NULL);");
+                               "Fullname VARCHAR(255) );");
     
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Genres (" +
                                "UserName VARCHAR(255) NOT NULL," +
@@ -98,6 +98,3 @@ public class DB {
         }
     }
 }
-
-
-

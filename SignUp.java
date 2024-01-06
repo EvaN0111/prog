@@ -46,7 +46,7 @@ public class SignUp {
         String url = "jdbc:sqlite:UserInput.db";
         int intial_counters = 0;
         try (Connection connection = DriverManager.getConnection(url)) {
-            String sql = "INSERT INTO Genre(UserName, Pop, Rock, Rap, Jazz, HipHop, Classic, House) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Genres(UserName, Pop, Rock, Rap, Jazz, HipHop, Classic, House) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, un_insert);
                 for (int i = 2; i <= 8; i++) {

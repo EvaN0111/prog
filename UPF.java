@@ -1,11 +1,11 @@
 package gr.aueb.dmst.ecg.eprog;
 
-import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class UPF {
 
     public String uqun() {
-        Scanner s2 = new Scanner(System.in);
 
         boolean exists;
         String un = ".";
@@ -13,17 +13,14 @@ public class UPF {
         try {
             do {
                 do {
-                    System.out.println("Username:");
-                    un = s2.nextLine();
+                    un= JOptionPane.showInputDialog("Enter your Username:");
                 } while (un == null);
                 //insert user's UserName and make sure it is not NULL.
                 exists = su1.checkAvailability(un);
                 //call method checkAvailability
 
                 if (exists) {
-                    System.out.println("This username is already taken. Please choose another one.");
-                } else {
-                    System.out.println("This username is available. Please continue!");
+                    JOptionPane.showMessageDialog(null, "This username is already taken. Please choose another one.");
                 }
             } while (exists);
             //check if username is not already taken.
@@ -31,7 +28,6 @@ public class UPF {
             System.err.println("There was a problem checking the uniqueness of the UserName.");
         }
 
-        s2.close();
         return un;
     }
 
