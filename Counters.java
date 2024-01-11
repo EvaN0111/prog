@@ -1,56 +1,123 @@
 package gr.aueb.dmst.ecg.eprog;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import javax.swing.JOptionPane;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
+import javafx.stage.Stage;
 
-public class Counters {
+public class Counters extends Application {
+    private static PreparedStatement preparedStatement;
+    private static ResultSet resultSet;
+    Queue<String> queue = new LinkedList<>();
+    Map<String, Integer> genreCount = new HashMap<>();
 
-    private Map<String, Integer> genreCount = new HashMap<>();
-    private Queue<String> queue = new LinkedList<>();
-    private String category;
-    private int[] vas = new int[7];
+    public Map<String, Integer> MGen(String name) {
 
-    public void count(List<Integer> genres, int genr) {
-        for (int i = 0; i <= 6; i++) {
-            category = getGenreCategory(i);
-            if (genr == i) {
-                vas[i] = vas[i] +1;
-                System.out.println("increased");
-            } else {
-                vas[i] = genres.get(i);
+        // create url and sql query
+        String url = "jdbc:sqlite:UserInput.db";
+        String sql = "SELECT Pop, Rock, Rap, Jazz, HipHop, Classic, House FROM Genres WHERE UserName = ?";
+
+        try (
+                // Establish a connection to the database
+                Connection connection = DriverManager.getConnection(url);
+
+                // Create a PreparedStatement with the SQL query
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+            // Set the parameter value
+            preparedStatement.setString(1, name);
+
+            // Execute the query and get the ResultSet
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                // Get the ResultSetMetaData to retrieve column names
+                ResultSetMetaData metaData = resultSet.getMetaData();
+
+                // Iterate through the ResultSet and store data in the Map
+                while (resultSet.next()) {
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        String key = metaData.getColumnName(i);
+                        int value = resultSet.getInt(i);
+
+                        // Put the data into the Map
+                        genreCount.put(key, value);
+
+                    }
+                }
             }
-            if (queue.size() == 10) {
-                queue.remove();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            queue.add(category);
-            System.out.println("added");
         }
+        return genreCount;
     }
 
-    private String getGenreCategory(int i) {
-        switch (i) {
-            case 1: return "Pop";
-            case 2: return "Rock";
-            case 3: return "Rap";
-            case 4: return "Jazz";
-            case 5: return "Hip Hop";
-            case 6: return "Classic";
-            case 7: return "House";
-            default: return "Unknown";
+    public void Count(String category, Map<String, Integer> genreCount) {
+
+        // store the updated genre count data in the map
+        if (genreCount.containsKey(category)) {
+            genreCount.put(category, genreCount.get(category) + 1);
+        } else {
+            genreCount.put(category, 1);
         }
+        // add the genre in the queue that takes up to 10 genres
+        if (queue.size() == 10) {
+            queue.remove();
+        }
+        queue.add(category);
     }
 
-    public void showStatistics() {
-        System.out.println("Genre count: " + genreCount);
-        JOptionPane.showMessageDialog(null,"Genre count: " + genreCount);
+    // show the count for each category heard
+    public void ShowStatistics(Map<String, Integer> genreCount) {
+        System.out.println("Genre count: " + genreCount); // + τα στατιστικα σε γραφιμματα μεσω αλλης κλασης
     }
 
-    public void showHistory() {
-        JOptionPane.showMessageDialog(null,"Categories of the last songs you heard: " + queue);
+    // show the history queue
+    public void ShowHistory() {
+        System.out.println("Categories of the last songs you heard: " + queue);
     }
+
+    @Override
+    public void start(Stage stage) {
+        // creation of list for the pie chart
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+        // data insertion from the genrecount map
+        for (Map.Entry<String, Integer> entry : genreCount.entrySet()) {
+            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+
+        // create pie chart
+        final PieChart chart = new PieChart(pieChartData);
+        chart.setTitle("Στατιστικά Είδη Μουσικής");
+
+        // create scene and show the pie
+        Scene scene = new Scene(chart, 600, 400);
+        stage.setScene(scene);
+        stage.setTitle("Pie Chart Example");
+        stage.show();
+
+    }
+
 }

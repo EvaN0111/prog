@@ -1,5 +1,6 @@
 package gr.aueb.dmst.ecg.eprog;
 
+import java.util.NoSuchElementException;
 import javax.swing.JOptionPane;
 
 public class SUfn {
@@ -12,9 +13,9 @@ public class SUfn {
                 fn = JOptionPane.showInputDialog("Enter your Full name:");
                 // insert the user's Fullname.
             } while (fn.equals(""));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null,"There has been a problem inserting your Fullname");
+            JOptionPane.showMessageDialog(null, "There has been a problem inserting your Fullname");
             fn = " ";
         }
 
@@ -26,11 +27,11 @@ public class SUfn {
         try {
             ps = JOptionPane.showInputDialog("Enter your Password:");
             // insert the user's password.
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null,"There has been a problem inserting your Password");
+            JOptionPane.showMessageDialog(null, "There has been a problem inserting your Password");
             ps = " ";
-        } 
+        }
         return ps;
     }
 
