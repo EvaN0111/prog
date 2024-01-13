@@ -94,8 +94,8 @@ public class Counters extends Application {
     }
 
     // show the history queue
-    public void ShowHistory() {
-        System.out.println("Categories of the last songs you heard: " + queue);
+    public Queue<String> ShowHistory() {
+        return queue;
     }
 
     @Override
