@@ -1,8 +1,12 @@
 package gr.aueb.dmst.ecg.eprog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
+
 import javax.swing.*;
 
 import javafx.application.Application;
@@ -18,8 +22,12 @@ public class Main {
 
         // initialize all the necessary variables
         final int[] a11 = new int[1];
-        int a2;
-        String np, fn, psi, un, psu, gn, dec, mood;
+        String[] playlist = new String[10];
+        
+        String[] pl2 = new String[10];
+        int a2 = 0;
+        int tm = 0;
+        String fn, psi, un, psu, gn, dec, mood;
         boolean yn = false;
         String namefinal = null;
         String fullfinal = null;
@@ -55,106 +63,132 @@ public class Main {
                 frame.setVisible(true);
             });
             // let the user choose if they want to sign in or sign up by typing 1 or 2.
-            try {
-                // Sleep for 5 seconds (5000 milliseconds)
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            ButtonsSIU button = new ButtonsSIU();
-            a11[0] = button.bt();
 
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error while printing the welcome panel.");
         }
 
-        do {
-            try {
-                // Sleep for 5 seconds (5000 milliseconds)
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } while (a11[0] != 1 && a11[0] != 2);
-
-        // ask for appropriate data to logIn.
-        if (a11[0] == 1) {
-            do {
-                un = JOptionPane.showInputDialog("Enter your Username:");
-                psi = JOptionPane.showInputDialog("Enter your Password:");
-                // check if username and password are correct.
-                try {
-                    UserDAO auth = new UserDAO();
-                    yn = auth.authenticate(un, psi);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.err.println("There has been a problem authenticating your data.");
-                }
-                // show appropriate message
-                if (yn) {
-                    JOptionPane.showMessageDialog(null, "Welcome back " + un);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Wrong Username or password, please try again!");
-                }
-            } while (yn == false);
-            namefinal = un;
-            passfinal = psi;
-
-        } else if (a11[0] == 2) {
-            // call method where user inserts fullname and password
-            fn = SUfn.sif();
-            psu = SUfn.sip();
-
-            // call the method that reads and ensures the uniqueness of the UserName(PK).
-            UPF u1 = new UPF();
-            String uname = u1.uqun();
-
-            namefinal = uname;
-            passfinal = psu;
-            fullfinal = fn;
-
-            // call method that ensures that the sign up data insertion in the database was
-            // done correctly.
-            UPF u2 = new UPF();
-            u2.datain(fn, uname, psu);
-            // call method that ensures that the counter initialization was made correctly.
-            u2.incounters(uname);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Invalid option. Please choose option 1 or 2.");
+        try {
+            // Sleep for 5 seconds (5000 milliseconds)
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        // show 'you have logged-in' panel
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("MusiVerse App");
-            frame.setUndecorated(true); // Αφαιρεί την πλαίσιο διακόσμησης
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        do {
+            tm = 0;
+            ButtonsSIU button = new ButtonsSIU();
+            a11[0] = button.bt();
 
-            LogInPanel welcomePanel = new LogInPanel(frame);
-            frame.add(welcomePanel);
+            do {
+                try {
+                    // Sleep for 5 seconds (5000 milliseconds)
+                    Thread.sleep(0500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (a11[0] != 1 && a11[0] != 2);
 
-            frame.setSize(500, 300);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
+            GraphWelcome sii = new GraphWelcome();
 
+            // ask for appropriate data to logIn.
+            if (a11[0] == 1) {
+                tm = 0;
+                do {
+                    un = sii.unpanel();
+                    psi = sii.pspanel();
+                    // check if username and password are correct.
+                    try {
+                        UserDAO auth = new UserDAO();
+                        yn = auth.authenticate(un, psi);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.err.println("There has been a problem authenticating your data.");
+                    }
+                    // show appropriate message
+                    if (!yn && tm <= 1) {
+                        JOptionPane.showMessageDialog(null, "Wrong Username or password, please try again!");
+                        tm++;
+                    }
+                    if (tm == 2) {
+                        yn = true;
+                    }
+                } while (yn == false);
+                namefinal = un;
+                passfinal = psi;
+
+            } else if (a11[0] == 2) {
+                // call method where user inserts fullname and password
+                fn = sii.fnpanel();
+                psu = sii.pspanel();
+
+                // call the method that reads and ensures the uniqueness of the UserName(PK).
+                UPF u1 = new UPF();
+                String uname = u1.uqun();
+
+                namefinal = uname;
+                passfinal = psu;
+                fullfinal = fn;
+
+                // call method that ensures that the sign up data insertion in the database was
+                // done correctly.
+                UPF u2 = new UPF();
+                u2.datain(fn, uname, psu);
+                // call method that ensures that the counter initialization was made correctly.
+                u2.incounters(uname);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid option. Please choose option 1 or 2.");
+            }
+        } while (tm == 2);
+
+        try {
+            // Sleep for 5 seconds (5000 milliseconds)
+            Thread.sleep(0300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            // show 'you have logged-in' panel
+            SwingUtilities.invokeLater(() -> {
+                JFrame frame = new JFrame("MusiVerse App");
+                frame.setUndecorated(true); // Αφαιρεί την πλαίσιο διακόσμησης
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                LogInPanel welcomePanel = new LogInPanel(frame);
+                frame.add(welcomePanel);
+
+                frame.setSize(500, 300);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error while showing the log in panel");
+        }
         // set the user's data
         User us = new User(fullfinal, namefinal, passfinal);
         us.setFullname(fullfinal);
         us.setPassword(passfinal);
         us.setUsername(namefinal);
 
+        AIModel openai = new AIModel(/* input */);
+
         Counters count = new Counters();
+        // retrieve the genre count from the database for this user.
+        genrecount = count.MGen(namefinal);
 
         // ask user what feature they would like to use
         do {
-            System.out.printf(
-                    "Would you like to:%n 1. Get a new playlist suggestion.%n 2. View your Genre Statistics.%n 3. View your recent Playlist History.%n 4. Sign out.%n");
-            a2 = s5.nextInt();
+            
+           
+                System.out.printf(
+                        "Would you like to:%n 1. Get a new playlist suggestion.%n 2. View your Genre Statistics.%n 3. View your recent Playlist History.%n 4. Sign out.%n");
+                a2 = s5.nextInt();
+            
             if (a2 == 1) {
-                do {
 
                     String username = us.getUsername();
 
@@ -165,11 +199,6 @@ public class Main {
                     int genreValue = graphOptions.getGenreValue();
                     int decadeValue = graphOptions.getDecadeValue();
                     int moodValue = graphOptions.getMoodValue();
-
-                    // Use the values as needed
-                    System.out.println("Genre Value: " + genreValue);
-                    System.out.println("Decade Value: " + decadeValue);
-                    System.out.println("Mood Value: " + moodValue);
 
                     // turn the returned int values into strings
                     gn = " ";
@@ -196,9 +225,7 @@ public class Main {
                     try {
                         Savecount sv = new Savecount();
                         boolean updated = sv.increaseCounter(gn, username);
-                        if (updated) {
-                            System.out.println("the counter for genre " + gn + " increased.");
-                        } else {
+                        if (!updated) {
                             System.out.println("the counter " + gn + " did not increase.");
                         }
 
@@ -207,54 +234,97 @@ public class Main {
                         System.err.println("There has been a problem updating the database.");
                     }
 
-                    // Pass the data to the AI and display the suggested playlist.
-                    AIModel openai = new AIModel(/* input */);
-                    String genlist = openai.genAnswer(gn, mood, dec);
-                    System.out.println(genlist);
+                    CountDownLatch latch = new CountDownLatch(1);
+                    try {
+                        // Pass the data to the AI and display the suggested playlist.
+                        
+                        String genlist = openai.genAnswer(gn, mood, dec);
+                        openai.StringToList(genlist);
+                        playlist = openai.songSeperator(genlist);
+                        System.out.println(playlist);
+                        for (int i = 0; i < 10; i++) {
+                            pl2[i] = playlist[i];
+                        }
+
+                        Showlist showl = new Showlist();
+                        SwingUtilities.invokeLater(() -> {
+                            JFrame frame = new JFrame("MusiVerse App");
+                            frame.setUndecorated(true);
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                            
+                            showl.sl(frame, pl2);
+                            frame.add(showl);
+
+                            frame.setSize(600, 500);
+                            frame.setLocationRelativeTo(null);
+                            frame.setVisible(true);
+                            latch.countDown();
+                        });
+
+                        
+                        latch.await();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.err.println("Error while connectiong with the AI");
+                    }
 
                     // Store the playlist in the history table.
-                    genrecount = count.MGen(username);
                     count.Count(gn, genrecount);
-
-                    // TODO FIX THIS
-                    do {
-                        JOptionPane.showMessageDialog(null, "Would you like to get a new playlist suggestion?");
-                        np = s7.nextLine();
-                        if (!np.equals("Yes") && !np.equals("No")) {
-                            JOptionPane.showMessageDialog(null, "Invalid option. Please type Yes or No.");
-                        }
-                    } while (!np.equals("Yes") && !np.equals("No"));
-                } while (np.equals("Yes"));
 
             } else if (a2 == 2) {
                 // Statistics' Diagrams
                 Application.launch(Counters.class, args);
 
             } else if (a2 == 3) {
+                Queue<String> queue = count.ShowHistory();
+                Map<String, Integer> genrecount2 = genrecount;
                 // History of previous genres
-                count.ShowHistory();
-                count.ShowStatistics(genrecount);
+                try {
+                    SwingUtilities.invokeAndWait(() -> {
+                        JFrame frame = new JFrame("MusiVerse App");
+                        frame.setUndecorated(true);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                        History welcomePanel = new History();
+                        welcomePanel.history2(frame, genrecount2, queue);
+                        frame.add(welcomePanel);
+
+                        frame.setSize(750, 500);
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
+                    });
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
 
             } else if (a2 != 4) {
                 JOptionPane.showMessageDialog(null, "Invalid option. Please choose between option 1 and 4.");
             }
-            if (a2 != 4) {
+            if (a2 != 4 && a2 != 20) {
                 a2 = 5;
             }
             if (a2 == 4) {
-                // show Goodbye panel
-                SwingUtilities.invokeLater(() -> {
-                    JFrame frame = new JFrame("MusiVerse App");
-                    frame.setUndecorated(true);
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                try {
+                    // show Goodbye panel
+                    SwingUtilities.invokeLater(() -> {
+                        JFrame frame = new JFrame("MusiVerse App");
+                        frame.setUndecorated(true);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                    LogOutPanel welcomePanel = new LogOutPanel(frame);
-                    frame.add(welcomePanel);
+                        LogOutPanel welcomePanel = new LogOutPanel(frame);
+                        frame.add(welcomePanel);
 
-                    frame.setSize(600, 400);
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
-                });
+                        frame.setSize(600, 400);
+                        frame.setLocationRelativeTo(null);
+                        frame.setVisible(true);
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("error while printing the Goodbye panel");
+                }
             }
         } while (a2 != 1 && a2 != 2 && a2 != 3 && a2 != 4);
 
