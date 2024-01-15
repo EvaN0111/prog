@@ -21,7 +21,7 @@ public class GraphOptions extends JFrame {
 
     public GraphOptions() {
         try {
-            // Set up the JFrame
+            // set up the JFrame
             setTitle("Make your choices!");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setSize(400, 300);
@@ -45,17 +45,17 @@ public class GraphOptions extends JFrame {
             add(decadePanel, "decadePanel");
             add(moodPanel, "moodPanel");
 
-            // Center the frame on the screen
+            // center the frame on the screen
             setLocationRelativeTo(null);
 
-            // Display the JFrame
+            // display the JFrame
             setVisible(true);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Wait for user interaction
+        // wait for user interaction
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -73,7 +73,7 @@ public class GraphOptions extends JFrame {
 
     private void addGenreButtons() {
 
-        // Create buttons
+        // create buttons
         JButton popButton = createStyledButton("Pop");
         JButton rockButton = createStyledButton("Rock");
         JButton rapButton = createStyledButton("Rap");
@@ -82,7 +82,7 @@ public class GraphOptions extends JFrame {
         JButton classicButton = createStyledButton("Classic");
         JButton houseButton = createStyledButton("House");
 
-        // Add action listeners to the buttons
+        // add action listeners to the buttons
         popButton.addActionListener(createActionListener("Pop"));
         rockButton.addActionListener(createActionListener("Rock"));
         rapButton.addActionListener(createActionListener("Rap"));
@@ -105,7 +105,7 @@ public class GraphOptions extends JFrame {
 
     private void addDecadeButtons() {
 
-        // Create buttons for decades
+        // create buttons for decades
         JButton decade50sButton = createStyledButton("1950s");
         JButton decade60sButton = createStyledButton("1960s");
         JButton decade70sButton = createStyledButton("1970s");
@@ -114,7 +114,7 @@ public class GraphOptions extends JFrame {
         JButton decade2000sButton = createStyledButton("2000s");
         JButton decade2010sButton = createStyledButton("2010s");
 
-        // Add action listeners to the decade buttons
+        // add action listeners to the decade buttons
         decade50sButton.addActionListener(createActionListener(1950));
         decade60sButton.addActionListener(createActionListener(1960));
         decade70sButton.addActionListener(createActionListener(1970));
@@ -162,10 +162,10 @@ public class GraphOptions extends JFrame {
 
     private JButton createStyledButton(String label) {
         JButton button = new JButton(label);
-        button.setBackground(Color.WHITE); // Set background color
-        button.setForeground(Color.BLACK); // Set text color
-        button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Impact", Font.ITALIC, 16)); // Set font
+        button.setBackground(Color.WHITE); // set background color
+        button.setForeground(Color.BLACK); // set text color
+        button.setFocusPainted(false); // remove focus border
+        button.setFont(new Font("Impact", Font.ITALIC, 16)); // set font
         return button;
     }
 

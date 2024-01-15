@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class SignUp {
 
     public boolean checkAvailability(String un_check) {
-        //establish a connection with the database
+        // establish a connection with the database
         String url = "jdbc:sqlite:UserInput.db";
         try (Connection connection = DriverManager.getConnection(url)) {
             //execute sql query
@@ -31,10 +31,10 @@ public class SignUp {
     }
 
     public boolean insertData(String fn_insert, String un_insert, String ps_insert) {
-        //establish a connection with the database
+        // establish a connection with the database
         String url = "jdbc:sqlite:UserInput.db";
         try (Connection connection = DriverManager.getConnection(url)) {
-            //execute sql query
+            // execute sql query
             String sql = "INSERT INTO Input(Password, UserName, Fullname) VALUES(?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 //insert user's data in the database
@@ -51,15 +51,15 @@ public class SignUp {
     }
 
     public boolean initializingCounters(String un_insert) {
-        //establish a connection with the database
+        // establish a connection with the database
         String url = "jdbc:sqlite:UserInput.db";
         int intial_counters = 0;
         try (Connection connection = DriverManager.getConnection(url)) {
-            //execute sql query
+            // execute sql query
             String sql = "INSERT INTO Genres(UserName, Pop, Rock, Rap, Jazz, HipHop, Classic, House) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, un_insert);
-                //set all genre counters 0
+                // set all genre counters 0
                 for (int i = 2; i <= 8; i++) {
                     preparedStatement.setInt(i, intial_counters);
                 }

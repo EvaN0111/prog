@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StarPanel extends JPanel {
-    // create the appropriate methods so that stars are shown in the backround
+    // create the appropriate methods so that stars are shown in the background
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

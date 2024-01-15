@@ -12,9 +12,9 @@ public class GraphNP extends JFrame {
     private CountDownLatch latch = new CountDownLatch(1);
     private String ans;
     
-    //create the panel where the user will be choosing whether they want another playlist or not 
+    // create the panel where the user will be choosing whether they want another playlist or not 
     public GraphNP() {
-        // Set up the JFrame
+        // set up the JFrame
         
         setTitle("Choose a new playlist!");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,13 +26,13 @@ public class GraphNP extends JFrame {
         addQuestion(npPanel, "Would you like a new playlist?");
         addButtons();
 
-        // Center the frame on the screen
+        // center the frame on the screen
         setLocationRelativeTo(null);
         
-        // Display the JFrame
+        // display the JFrame
         setVisible(true);
 
-        // Wait for user interaction
+        // wait for user interaction
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -52,21 +52,21 @@ public class GraphNP extends JFrame {
 
     private void addButtons() {
         
-        //create buttons
+        // create buttons
         JButton yesButton = createButton("Yes");
         JButton noButton = createButton("No");
 
-        // Add action listeners to the buttons
+        // add action listeners to the buttons
         yesButton.addActionListener(createActionListener("Yes"));
         noButton.addActionListener(createActionListener("No"));
 
-        // Set alignment for buttons
+        // set alignment for buttons
         yesButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         noButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        npPanel.add(Box.createVerticalStrut(10)); // Add some vertical spacing
+        npPanel.add(Box.createVerticalStrut(10)); // add some vertical spacing
         npPanel.add(yesButton);
-        npPanel.add(Box.createVerticalStrut(10)); // Add some vertical spacing
+        npPanel.add(Box.createVerticalStrut(10)); // add some vertical spacing
         npPanel.add(noButton);
 
         add(npPanel);
@@ -74,10 +74,10 @@ public class GraphNP extends JFrame {
 
     private JButton createButton(String label) {
         JButton button = new JButton(label);
-        button.setBackground(Color.WHITE); // Set background color
-        button.setForeground(Color.BLACK); // Set text color
-        button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Impact", Font.ITALIC, 16)); // Set font
+        button.setBackground(Color.WHITE); // set background color
+        button.setForeground(Color.BLACK); // set text color
+        button.setFocusPainted(false); // remove focus border
+        button.setFont(new Font("Impact", Font.ITALIC, 16)); // set font
         return button;
     }
 

@@ -12,7 +12,7 @@ public class GraphFeat extends JFrame {
     private CountDownLatch latch = new CountDownLatch(1);
     private int ch = 0;
 
-    //create the panel where the user will be choosing what feature they would like to use.
+    // create the panel where the user will be choosing what feature they would like to use.
     public GraphFeat() {
         setTitle("Choose a feature!");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,13 +24,13 @@ public class GraphFeat extends JFrame {
         addText(featPanel, "Would you like to:");
         addButtons();
 
-        // Center the frame on the screen
+        // center the frame on the screen
         setLocationRelativeTo(null);
         
-        // Display the JFrame
+        // display the JFrame
         setVisible(true);
 
-        // Wait for user interaction
+        // wait for user interaction
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -48,31 +48,31 @@ public class GraphFeat extends JFrame {
 
     private void addButtons() {
         
-        //create buttons
+        // create buttons
         JButton psButton = createButton("Get a new playlist suggestion.");
         JButton gsButton = createButton("View your Genre Statistics.");
         JButton phButton = createButton("View your recent Playlist History.");
         JButton soButton = createButton("Sign out.");
 
-        // Add action listeners to the buttons
+        // add action listeners to the buttons
         psButton.addActionListener(createActionListener("Get a new playlist suggestion."));
         gsButton.addActionListener(createActionListener("View your Genre Statistics."));
         phButton.addActionListener(createActionListener("View your recent Playlist History."));
         soButton.addActionListener(createActionListener("Sign out."));
 
-        // Set alignment for buttons
+        // set alignment for buttons
         psButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         gsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         phButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         soButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        featPanel.add(Box.createVerticalStrut(15)); // Add some vertical spacing
+        featPanel.add(Box.createVerticalStrut(15)); // add some vertical spacing
         featPanel.add(psButton);
-        featPanel.add(Box.createVerticalStrut(15)); // Add some vertical spacing
+        featPanel.add(Box.createVerticalStrut(15)); // add some vertical spacing
         featPanel.add(gsButton);
-        featPanel.add(Box.createVerticalStrut(15)); // Add some vertical spacing
+        featPanel.add(Box.createVerticalStrut(15)); // add some vertical spacing
         featPanel.add(phButton);
-        featPanel.add(Box.createVerticalStrut(15)); // Add some vertical spacing
+        featPanel.add(Box.createVerticalStrut(15)); // add some vertical spacing
         featPanel.add(soButton);
 
         add(featPanel);
@@ -80,10 +80,10 @@ public class GraphFeat extends JFrame {
 
     private JButton createButton(String label) {
         JButton button = new JButton(label);
-        button.setBackground(Color.WHITE); // Set background color
-        button.setForeground(Color.BLACK); // Set text color
-        button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Impact", Font.ITALIC, 16)); // Set font
+        button.setBackground(Color.WHITE); // set background color
+        button.setForeground(Color.BLACK); // set text color
+        button.setFocusPainted(false); // remove focus border
+        button.setFont(new Font("Impact", Font.ITALIC, 16)); // set font
         return button;
     }
 
