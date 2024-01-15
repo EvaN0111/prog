@@ -19,10 +19,6 @@ public class User {
         this.Password = Password;
     }
 
-    /*
-     * Setters and Getters for User
-    */
-
     public String getFullname() {
         return Fullname;
     }
@@ -45,6 +41,19 @@ public class User {
 
     public String getPassword() {
         return Password;
-    }
+     }                                             
+ 
+}    
+       
 
-}
+
+
+
+                                                                                                                                                              
+                           
+                                                  
+ 
+
+
+
+
