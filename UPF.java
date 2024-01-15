@@ -7,6 +7,7 @@ public class UPF {
 
     public String uqun() {
 
+        GraphWelcome gw = new GraphWelcome();
         boolean exists;
         String un = ".";
         SignUp su1 = new SignUp();
@@ -14,7 +15,7 @@ public class UPF {
             do {
                 //insert user's UserName and make sure it is not NULL.
                 do {
-                    un= JOptionPane.showInputDialog("Enter your Username:");
+                    un= gw.unpanel();
                 } while (un == null);
 
                 //call method that ensures username's anailability

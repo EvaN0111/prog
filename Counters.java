@@ -16,13 +16,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Counters extends Application {
     private static PreparedStatement preparedStatement;
     private static ResultSet resultSet;
     Queue<String> queue = new LinkedList<>();
-    Map<String, Integer> genreCount = new HashMap<>();
+    static Map<String, Integer> genreCount = new HashMap<>();
 
     public Map<String, Integer> MGen(String name) {
 
@@ -98,26 +99,44 @@ public class Counters extends Application {
         return queue;
     }
 
+    public void setCount( Map<String, Integer> genreCount) {
+        this.genreCount = genreCount;
+    }
+    public static Map<String, Integer> getCount() {
+        return genreCount;
+    }
+
     @Override
     public void start(Stage stage) {
         // creation of list for the pie chart
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
-        // data insertion from the genrecount map
+        // data insertion from the genreCount map
         for (Map.Entry<String, Integer> entry : genreCount.entrySet()) {
             pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
         }
 
         // create pie chart
         final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Στατιστικά Είδη Μουσικής");
+        chart.setTitle("Genre Statistics");
 
-        // create scene and show the pie
+        // set background color
+        chart.setStyle("-fx-background-color: white;");
         Scene scene = new Scene(chart, 600, 400);
+
+        // set scene background color
+        scene.setFill(Color.rgb(0, 0, 102 )); // Dark blue background
+
         stage.setScene(scene);
         stage.setTitle("Pie Chart Example");
         stage.show();
-
     }
 
+    public static void main(String[] args) {
+        // Example genreCount map
+        Map<String, Integer> genre = getCount();
+
+        // Launch the JavaFX application
+        launch(args);
+    }
 }

@@ -7,7 +7,8 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
 public class GraphOptions extends JFrame {
-    //show option panels with buttons so that the user can choose the desired music genre, decade and mood.
+    // show option panels with buttons so that the user can choose the desired music
+    // genre, decade and mood.
     private JPanel genrePanel;
     private JPanel decadePanel;
     private JPanel moodPanel;
@@ -19,30 +20,40 @@ public class GraphOptions extends JFrame {
     private int m_value = 0;
 
     public GraphOptions() {
-        // Set up the JFrame
-        setTitle("Make your choices!");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        try {
+            // Set up the JFrame
+            setTitle("Make your choices!");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(400, 300);
 
-        // create the genre panel with buttons
-        genrePanel = new JPanel(new GridLayout(3, 3, 10, 10));
-        addGenreButtons();
+            // create the genre panel with buttons
+            genrePanel = new StarPanel();
+            genrePanel.setBackground(new Color(0, 0, 102));
+            addTextToPanel(genrePanel, "Please, choose a genre!", BorderLayout.BEFORE_FIRST_LINE);
+            addGenreButtons();
 
-        // create the decade panel initially empty
-        decadePanel = new JPanel();
+            // create the decade panel initially empty
+            decadePanel = new StarPanel();
 
-        // create the mood panel initially empty
-        moodPanel = new JPanel();
+            // create the mood panel initially empty
+            moodPanel = new StarPanel();
 
-        // use cardlayout to switch between genre and decade panels
-        cardLayout = new CardLayout();
-        setLayout(cardLayout);
-        add(genrePanel, "genrePanel");
-        add(decadePanel, "decadePanel");
-        add(moodPanel, "moodPanel");
+            // use cardlayout to switch between genre and decade panels
+            cardLayout = new CardLayout();
+            setLayout(cardLayout);
+            add(genrePanel, "genrePanel");
+            add(decadePanel, "decadePanel");
+            add(moodPanel, "moodPanel");
 
-        // Display the JFrame
-        setVisible(true);
+            // Center the frame on the screen
+            setLocationRelativeTo(null);
+
+            // Display the JFrame
+            setVisible(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Wait for user interaction
         try {
@@ -50,6 +61,14 @@ public class GraphOptions extends JFrame {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void addTextToPanel(JPanel panel, String text, String position) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Impact", Font.ITALIC, 16));
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setForeground(Color.WHITE);
+        panel.add(label, position);
     }
 
     private void addGenreButtons() {
@@ -72,6 +91,7 @@ public class GraphOptions extends JFrame {
         classicButton.addActionListener(createActionListener("Classic"));
         houseButton.addActionListener(createActionListener("House"));
 
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 3, 10, 10));
         genrePanel.add(popButton);
         genrePanel.add(rockButton);
         genrePanel.add(rapButton);
@@ -79,6 +99,8 @@ public class GraphOptions extends JFrame {
         genrePanel.add(hipHopButton);
         genrePanel.add(classicButton);
         genrePanel.add(houseButton);
+
+        genrePanel.add(buttonPanel, BorderLayout.CENTER);
     }
 
     private void addDecadeButtons() {
@@ -101,6 +123,8 @@ public class GraphOptions extends JFrame {
         decade2000sButton.addActionListener(createActionListener(2000));
         decade2010sButton.addActionListener(createActionListener(2010));
 
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 3, 10, 10));
+        buttonPanel.setBackground(new Color(0, 0, 102));
         decadePanel.add(decade50sButton);
         decadePanel.add(decade60sButton);
         decadePanel.add(decade70sButton);
@@ -108,6 +132,8 @@ public class GraphOptions extends JFrame {
         decadePanel.add(decade90sButton);
         decadePanel.add(decade2000sButton);
         decadePanel.add(decade2010sButton);
+
+        decadePanel.add(buttonPanel, BorderLayout.CENTER);
     }
 
     private void addMoodButtons() {
@@ -123,19 +149,23 @@ public class GraphOptions extends JFrame {
         sleepButton.addActionListener(createActionListener1("Sleep"));
         chillButton.addActionListener(createActionListener1("Chill"));
 
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 10, 10));
+        buttonPanel.setBackground(new Color(0, 0, 102));
         moodPanel.add(workoutButton);
         moodPanel.add(partyButton);
         moodPanel.add(studyButton);
         moodPanel.add(sleepButton);
         moodPanel.add(chillButton);
+
+        moodPanel.add(buttonPanel, BorderLayout.CENTER);
     }
 
     private JButton createStyledButton(String label) {
         JButton button = new JButton(label);
-        button.setBackground(new Color(128, 0, 128)); // Set background color
-        button.setForeground(Color.WHITE); // Set text color
+        button.setBackground(Color.WHITE); // Set background color
+        button.setForeground(Color.BLACK); // Set text color
         button.setFocusPainted(false); // Remove focus border
-        button.setFont(new Font("Arial", Font.BOLD, 18)); // Set font
+        button.setFont(new Font("Impact", Font.ITALIC, 16)); // Set font
         return button;
     }
 
@@ -182,8 +212,9 @@ public class GraphOptions extends JFrame {
         } else if (genre.equals("House")) {
             g_value = 7;
         }
-        System.out.println(g_value);
         cardLayout.show(getContentPane(), "decadePanel");
+        decadePanel.setBackground(new Color(0, 0, 102));
+        addTextToPanel(decadePanel, "Please, choose a decade!", BorderLayout.CENTER);
         addDecadeButtons();
     }
 
@@ -203,8 +234,9 @@ public class GraphOptions extends JFrame {
         } else if (decade == 2010) {
             d_value = 7;
         }
-        System.out.println(d_value);
         cardLayout.show(getContentPane(), "moodPanel");
+        moodPanel.setBackground(new Color(0, 0, 102));
+        addTextToPanel(moodPanel, "Please, choose your mood!", BorderLayout.CENTER);
         addMoodButtons();
     }
 
@@ -220,7 +252,6 @@ public class GraphOptions extends JFrame {
         } else if (mood.equals("Chill")) {
             m_value = 5;
         }
-        System.out.println(m_value);
         latch.countDown();
         dispose();
     }

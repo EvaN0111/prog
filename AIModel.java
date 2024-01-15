@@ -36,8 +36,8 @@ public class AIModel {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } while (answer.text() == null);
-        return answer.text();
+        } while (answer == null);
+        return (answer.text() != null) ? answer.text() : ""; // Check for text() to avoid NPE
 
     }
 
@@ -78,6 +78,11 @@ public class AIModel {
             playlist[i] = title + " by " + artist;
             i++;
         }
-        return playlist;
+        if (playlist[1] != null) {
+            return playlist;
+        } else {
+            System.out.println("error null playlist");
+            return playlist;
+        }
     }
 }

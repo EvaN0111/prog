@@ -29,6 +29,7 @@ public class ButtonsSIU {
             // actions in case user closes the dialog
         } else if (ans == JOptionPane.CLOSED_OPTION) {
             System.out.println("Dialog closed");
+            a11 = 3;
             // Handle dialog closed logic here
 
         }

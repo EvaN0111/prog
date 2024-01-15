@@ -12,19 +12,20 @@ public class WelcomePanel extends JPanel {
     private Timer timer;
     private float panelAlpha;
 
+    //create the welcome panel
     public WelcomePanel(JFrame frame) {
-        setBackground(new Color(0, 0, 102)); // Μπλε σκούρο φόντο (RGB: 0, 0, 102)
-        setBorder(new EmptyBorder(20, 20, 20, 20)); // Προσθήκη ανθυγειού
+        setBackground(new Color(0, 0, 102));
+        setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // Δημιουργία ενός JLabel για το μήνυμα καλωσορίσματος
+       //create a Jlabel for the message
         welcomeLabel = new JLabel("Welcome to MusiVerse!");
-        welcomeLabel.setForeground(Color.WHITE); // Λευκό χρώμα κειμένου
-        welcomeLabel.setFont(new Font("Edwardian Script ITC", Font.BOLD, 40)); // Ρυθμίσεις γραμματοσειράς 
+        welcomeLabel.setForeground(Color.WHITE); 
+        welcomeLabel.setFont(new Font("Edwardian Script ITC", Font.BOLD, 40)); 
 
-        // Δημιουργία ενός GridBagLayout
+        // create a GridBagLayout
         setLayout(new GridBagLayout());
 
-        // Καθορισμός του GridBagConstraints για τον κεντρικό τοπικό προσανατολισμό
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -32,40 +33,40 @@ public class WelcomePanel extends JPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Προσθήκη του JLabel στο πάνελ με τις ρυθμίσεις του GridBagConstraints
+        // add the JLabel 
         add(welcomeLabel, gbc);
 
-        // Δημιουργία Timer για τη μετάβαση
+        // create a timer for the dicrease of the transparency
         timer = new Timer(20, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (panelAlpha < 1.0f) {
-                    panelAlpha += 0.02f; // Αυξάνει τη διαφάνεια
+                    panelAlpha += 0.02f; // dicrease the transparency
                     setAlpha(panelAlpha);
                     repaint();
                 } else {
-                    timer.stop(); // Σταματάει τον Timer μόλις η διαφάνεια γίνει 1
+                    timer.stop();
                 }
             }
         });
         timer.start();
 
-        // Δημιουργία Timer που θα κλείσει το παράθυρο μετά από 5 δευτερόλεπτα
+        // create a timer that closes the panel after 4 seconds
         Timer closeTimer;
-        closeTimer = new Timer(5000, new ActionListener() {
+        closeTimer = new Timer(4000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose(); // Κλείνει το παράθυρο
+                frame.dispose(); // close the frame
             }
         });
         closeTimer.start();
     }
 
     private void setAlpha(float alpha) {
-        // Ελέγχει αν η τιμή του alpha είναι στο έγκυρο εύρος
+        // checks if alpha value is valid
         alpha = Math.min(1.0f, Math.max(0.0f, alpha));
     
-        // Ρυθμίζει τη διαφάνεια του πανελ
+        // sets the transparency
         if (getBackground() instanceof Color) {
             Color bgColor = (Color) getBackground();
             setBackground(new Color(bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue(), (int) (alpha * 255)));
@@ -81,7 +82,7 @@ public class WelcomePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Προσθήκη αστεριών
+        // add stars
         drawStars(g, 100);
     }
 
@@ -94,20 +95,5 @@ public class WelcomePanel extends JPanel {
                 g.fillRect(x, y, 2, 2);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("MusiVerse App");
-            frame.setUndecorated(true); // Αφαιρεί την πλαίσιο διακόσμησης
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            WelcomePanel welcomePanel = new WelcomePanel(frame);
-            frame.add(welcomePanel);
-
-            frame.setSize(400, 300);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
     }
 }

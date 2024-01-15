@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
-
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javafx.application.Application;
 
@@ -22,9 +24,9 @@ public class Main {
 
         // initialize all the necessary variables
         final int[] a11 = new int[1];
-        String[] playlist = new String[10];
-        
-        String[] pl2 = new String[10];
+
+        boolean[] waits = { false };
+        String answer2 = "";
         int a2 = 0;
         int tm = 0;
         String fn, psi, un, psu, gn, dec, mood;
@@ -47,12 +49,31 @@ public class Main {
             System.err.println("error connecting with the database.");
         }
 
+        // show the backround panel
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("~MusiVerse~");
+
+            // Set the size to cover the whole screen
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            frame.setSize(screenSize);
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+
+            JLabel label = new JLabel("MusiVerse");
+            label.setForeground(Color.WHITE); // Set text color
+            label.setFont(new Font("Arial", Font.PLAIN, 300)); // Set font and size
+            frame.add(label);
+
+            frame.setVisible(true);
+        });
+
         // show the welcome panel
         try {
             // colors
             SwingUtilities.invokeLater(() -> {
                 JFrame frame = new JFrame("MusiVerse App");
-                frame.setUndecorated(true); // Αφαιρεί την πλαίσιο διακόσμησης
+                frame.setUndecorated(true);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 WelcomePanel welcomePanel = new WelcomePanel(frame);
@@ -62,7 +83,6 @@ public class Main {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             });
-            // let the user choose if they want to sign in or sign up by typing 1 or 2.
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,6 +96,7 @@ public class Main {
             e.printStackTrace();
         }
 
+        // let the user choose if they want to sign in or sign up by typing 1 or 2.
         do {
             tm = 0;
             ButtonsSIU button = new ButtonsSIU();
@@ -83,7 +104,7 @@ public class Main {
 
             do {
                 try {
-                    // Sleep for 5 seconds (5000 milliseconds)
+                    // Sleep for 0.5 seconds (0500 milliseconds)
                     Thread.sleep(0500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -144,7 +165,7 @@ public class Main {
         } while (tm == 2);
 
         try {
-            // Sleep for 5 seconds (5000 milliseconds)
+            // Sleep for 0.3 seconds (0300 milliseconds)
             Thread.sleep(0300);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -154,7 +175,7 @@ public class Main {
             // show 'you have logged-in' panel
             SwingUtilities.invokeLater(() -> {
                 JFrame frame = new JFrame("MusiVerse App");
-                frame.setUndecorated(true); // Αφαιρεί την πλαίσιο διακόσμησης
+                frame.setUndecorated(true);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 LogInPanel welcomePanel = new LogInPanel(frame);
@@ -174,22 +195,27 @@ public class Main {
         us.setPassword(passfinal);
         us.setUsername(namefinal);
 
-        AIModel openai = new AIModel(/* input */);
+        try {
+            // Sleep for 3.5 seconds (3500 milliseconds)
+            Thread.sleep(3500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Counters count = new Counters();
-        // retrieve the genre count from the database for this user.
-        genrecount = count.MGen(namefinal);
-
-        // ask user what feature they would like to use
         do {
-            
-           
-                System.out.printf(
-                        "Would you like to:%n 1. Get a new playlist suggestion.%n 2. View your Genre Statistics.%n 3. View your recent Playlist History.%n 4. Sign out.%n");
-                a2 = s5.nextInt();
-            
-            if (a2 == 1) {
 
+            // retrieve the genre count from the database for this user.
+            genrecount = count.MGen(namefinal);
+
+            // ask user what feature they would like to use with the appropriate panel
+            GraphFeat graphFeat = new GraphFeat();
+            a2 = graphFeat.getChoice();
+
+            // new playlist
+            if (a2 == 1) {
+                do {
+                    waits[0] = false;
                     String username = us.getUsername();
 
                     // Call the methods that show the option panels and set values graphOptions.
@@ -219,6 +245,9 @@ public class Main {
                             mood = moodall[i];
                         }
                     }
+                    // Store the playlist in the history table.
+                    count.Count(gn, genrecount);
+                    count.setCount(genrecount);
 
                     // Save the selected genre in the database and increase the appropriate counter
                     // by 1.
@@ -237,47 +266,58 @@ public class Main {
                     CountDownLatch latch = new CountDownLatch(1);
                     try {
                         // Pass the data to the AI and display the suggested playlist.
-                        
+
+                        AIModel openai = new AIModel(/* input */);
                         String genlist = openai.genAnswer(gn, mood, dec);
                         openai.StringToList(genlist);
-                        playlist = openai.songSeperator(genlist);
-                        System.out.println(playlist);
-                        for (int i = 0; i < 10; i++) {
-                            pl2[i] = playlist[i];
-                        }
+                        final String[] playlist = openai.songSeperator(genlist);
 
-                        Showlist showl = new Showlist();
                         SwingUtilities.invokeLater(() -> {
                             JFrame frame = new JFrame("MusiVerse App");
                             frame.setUndecorated(true);
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                            
-                            showl.sl(frame, pl2);
+
+                            Showlist showl = new Showlist(frame, playlist, waits);
                             frame.add(showl);
 
                             frame.setSize(600, 500);
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);
                             latch.countDown();
+
                         });
 
-                        
+                        while (waits[0] == false) {
+                            try {
+                                // Sleep for a short duration to avoid excessive CPU usage
+                                Thread.sleep(1000); // Sleep for 1000 milliseconds
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         latch.await();
+
+                        // ask whether the user wants another playlst
+                        GraphNP graphNP = new GraphNP();
+                        answer2 = graphNP.getAns();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.err.println("Error while connectiong with the AI");
                     }
+                } while (answer2.equals("Yes"));
 
-                    // Store the playlist in the history table.
-                    count.Count(gn, genrecount);
-
+                // genre statistics
             } else if (a2 == 2) {
                 // Statistics' Diagrams
-                Application.launch(Counters.class, args);
+                Application.launch(Counters.class);
 
+                // genre count and history
             } else if (a2 == 3) {
+                waits[0] = false;
                 Queue<String> queue = count.ShowHistory();
                 Map<String, Integer> genrecount2 = genrecount;
+
                 // History of previous genres
                 try {
                     SwingUtilities.invokeAndWait(() -> {
@@ -286,10 +326,10 @@ public class Main {
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                         History welcomePanel = new History();
-                        welcomePanel.history2(frame, genrecount2, queue);
+                        welcomePanel.history2(frame, genrecount2, queue, waits);
                         frame.add(welcomePanel);
 
-                        frame.setSize(750, 500);
+                        frame.setSize(800, 500);
                         frame.setLocationRelativeTo(null);
                         frame.setVisible(true);
                     });
@@ -298,7 +338,14 @@ public class Main {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                while (waits[0] == false) {
+                    try {
+                        // Sleep for a short duration to avoid excessive CPU usage
+                        Thread.sleep(1000); // Sleep for 1000 milliseconds
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
             } else if (a2 != 4) {
                 JOptionPane.showMessageDialog(null, "Invalid option. Please choose between option 1 and 4.");
@@ -306,6 +353,7 @@ public class Main {
             if (a2 != 4 && a2 != 20) {
                 a2 = 5;
             }
+            // sign out
             if (a2 == 4) {
                 try {
                     // show Goodbye panel
@@ -320,6 +368,14 @@ public class Main {
                         frame.setSize(600, 400);
                         frame.setLocationRelativeTo(null);
                         frame.setVisible(true);
+
+                        frame.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosing(WindowEvent e) {
+                                frame.dispose();
+                            }
+                        });
+
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
