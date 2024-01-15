@@ -12,19 +12,18 @@ public class WelcomePanel extends JPanel {
     private Timer timer;
     private float panelAlpha;
 
-    //create the welcome panel
+    //Create the welcome panel
     public WelcomePanel(JFrame frame) {
         setBackground(new Color(0, 0, 102));
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-       //create a Jlabel for the message
+       //Create a Jlabel for the message
         welcomeLabel = new JLabel("Welcome to MusiVerse!");
         welcomeLabel.setForeground(Color.WHITE); 
         welcomeLabel.setFont(new Font("Edwardian Script ITC", Font.BOLD, 40)); 
 
-        // create a GridBagLayout
+        //Create a GridBagLayout
         setLayout(new GridBagLayout());
-
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -33,15 +32,15 @@ public class WelcomePanel extends JPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // add the JLabel 
+        //Add the JLabel 
         add(welcomeLabel, gbc);
 
-        // create a timer for the dicrease of the transparency
+        //Create a timer for the dicrease of the transparency
         timer = new Timer(20, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (panelAlpha < 1.0f) {
-                    panelAlpha += 0.02f; // dicrease the transparency
+                    panelAlpha += 0.02f; //Dicrease the transparency
                     setAlpha(panelAlpha);
                     repaint();
                 } else {
@@ -51,7 +50,7 @@ public class WelcomePanel extends JPanel {
         });
         timer.start();
 
-        // create a timer that closes the panel after 4 seconds
+        //Create a timer that closes the panel after 4 seconds
         Timer closeTimer;
         closeTimer = new Timer(4000, new ActionListener() {
             @Override
@@ -63,10 +62,11 @@ public class WelcomePanel extends JPanel {
     }
 
     private void setAlpha(float alpha) {
-        // checks if alpha value is valid
+        
+        //Checks if alpha value is valid
         alpha = Math.min(1.0f, Math.max(0.0f, alpha));
     
-        // sets the transparency
+        //Sets the transparency
         if (getBackground() instanceof Color) {
             Color bgColor = (Color) getBackground();
             setBackground(new Color(bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue(), (int) (alpha * 255)));
@@ -77,12 +77,11 @@ public class WelcomePanel extends JPanel {
         }
     }
     
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // add stars
+        //Add stars
         drawStars(g, 100);
     }
 

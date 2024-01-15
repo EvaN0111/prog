@@ -13,11 +13,12 @@ public class LogOutPanel extends JPanel {
     private float alpha = 1.0f;
 
     public LogOutPanel(JFrame frame) {
-        //create a log out panel
+        
+        //Create a log out panel
         setBackground(new Color(0, 0, 102));
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        //create the message label
+        //Create the message label
         welcomeLabel = new JLabel("Thank you, see you soon...");
         welcomeLabel.setForeground(Color.WHITE);
         welcomeLabel.setFont(new Font("Edwardian Script ITC", Font.BOLD, 40));
@@ -31,9 +32,8 @@ public class LogOutPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         add(welcomeLabel, gbc);
 
-        //
         timer = new Timer(20, new ActionListener() {
-            //add motion to the stars
+            //Add motion to the stars
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (alpha > 0.02f) {
@@ -41,8 +41,8 @@ public class LogOutPanel extends JPanel {
                     repaint();
                 } else {
                     try {
-                        // Sleep for a short duration to avoid excessive CPU usage
-                        Thread.sleep (1500); // Sleep for 1500 milliseconds
+                        //Sleep for a short duration to avoid excessive CPU usage
+                        Thread.sleep (1500); //Sleep for 1500 milliseconds
                     } catch (InterruptedException e2) {
                         e2.printStackTrace();
                     }
@@ -66,7 +66,7 @@ public class LogOutPanel extends JPanel {
         g2d.dispose();
     }
 
-    //add stars
+    //Add stars
     private void drawStars(Graphics2D g, int numStars) {
         if (g != null) {
             g.setColor(Color.YELLOW);

@@ -9,16 +9,15 @@ public class LogInPanel extends JPanel {
     private Timer timer;
 
     public LogInPanel(JFrame frame) {
-        setBackground(new Color(0, 0, 102)); // dark blue backround (RGB: 0, 0, 102)
+        setBackground(new Color(0, 0, 102)); //Dark blue backround (RGB: 0, 0, 102)
 
-        // create JLabel for log in  message
+        //Create JLabel for log in  message
         welcomeLabel = new JLabel("You have succesfully logged in, enjoy!");
         welcomeLabel.setForeground(Color.WHITE);
         welcomeLabel.setFont(new Font("Edwardian Script ITC", Font.BOLD, 40)); 
 
-        // create a GridBagLayout
+        //Create a GridBagLayout
         setLayout(new GridBagLayout());
-
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -27,10 +26,9 @@ public class LogInPanel extends JPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        
         add(welcomeLabel, gbc);
 
-        // create a Timer that will close the panel after 3.5 seconds
+        //Create a Timer that will close the panel after 3.5 seconds
         timer = new Timer(3500, e -> {
             frame.dispose(); 
             timer.stop(); 
@@ -42,7 +40,7 @@ public class LogInPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // add stars
+        //Add stars
         drawStars(g, 100);
     }
 

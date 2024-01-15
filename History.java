@@ -15,12 +15,12 @@ public class History extends JPanel {
     public void history2(JFrame frame, Map<String, Integer> genreCount, Queue<String> queue, boolean[] waits) {
         setBackground(new Color(0, 0, 102));
 
-        // create a  JLabel for the message
+        //Create a  JLabel for the message
         welcomeLabel = new JLabel("Here is your genre history");
         welcomeLabel.setForeground(Color.white);
         welcomeLabel.setFont(new Font("Edwardian Script ITC", Font.BOLD, 30));
 
-        // create a button
+        //Create a button
         button1 = new JButton("Back to Menu");
 
         messageLabel = new JLabel("Genre Count: " + genreCount);
@@ -33,31 +33,27 @@ public class History extends JPanel {
         messageLabel2.setForeground(Color.WHITE);
         messageLabel2.setMaximumSize(new Dimension(750, Short.MAX_VALUE));
 
-
-        // create a  GridBagLayout
+        //Create a  GridBagLayout
         setLayout(new GridBagLayout());
 
-        //declaration of GridBagConstraints for the JLabel  (welcomeLabel)
+        //Declaration of GridBagConstraints for the JLabel (welcomeLabel)
         GridBagConstraints gbcWelcome = new GridBagConstraints();
         gbcWelcome.gridx = 0;
         gbcWelcome.gridy = 0;
         gbcWelcome.weightx = 1.0;
-        gbcWelcome.anchor = GridBagConstraints.NORTH; // Αλλαγή του αγκυρώματος στον βορρά
+        gbcWelcome.anchor = GridBagConstraints.NORTH;
 
-        // add the Jlabel
+        //Add the Jlabel
         add(welcomeLabel, gbcWelcome);
 
-        //declaration of GridBagConstraints for the button
+        //Declaration of GridBagConstraints for the button
         GridBagConstraints gbcButton1 = new GridBagConstraints();
         gbcButton1.gridx = 0; 
         gbcButton1.gridy = 1; 
         gbcButton1.anchor = GridBagConstraints.SOUTHWEST; 
 
-        
-       
         button1.setBackground(Color.WHITE);
-        button1.setForeground(new Color(0, 0, 102)); //set text color to black
-    
+        button1.setForeground(new Color(0, 0, 102)); //Set text color to black
         
         GridBagConstraints gbcMessage = new GridBagConstraints();
         gbcMessage.gridx = 0; 
@@ -71,20 +67,17 @@ public class History extends JPanel {
         gbcMessage2.weighty = 1.0; 
         gbcMessage2.anchor = GridBagConstraints.CENTER;
 
-        // add the elements with the GridBagConstraints settings
+        //Add the elements with the GridBagConstraints settings
         add(button1, gbcButton1);
         add(messageLabel, gbcMessage);
         add(messageLabel2, gbcMessage2);
 
-
-        // add ActionListener
+        //Add ActionListener
         button1.addActionListener(e -> {
-            frame.dispose();  // close the panel when the button is pressed
+            frame.dispose();  //Close the panel when the button is pressed
             waits[0] = true;
 
         });
-
-       
     }
 
     @Override
@@ -103,5 +96,4 @@ public class History extends JPanel {
             }
         }
     }
-
 }
