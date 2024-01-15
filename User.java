@@ -6,6 +6,7 @@ public class User {
     private String UserName;
     private String Password;
 
+
     /**
      * Full constuctor
      * 
@@ -31,13 +32,18 @@ public class User {
         this.UserName = UserName;
     }
 
+
     public String getUsername() {
         return UserName;
     }
 
+
+
     public void setPassword(String Password) {
         this.Password = Password;
     }
+
+
 
     public String getPassword() {
         return Password;
@@ -45,6 +51,31 @@ public class User {
  
 }    
        
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               
+ 
+ 
 
 
 
