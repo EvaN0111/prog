@@ -53,7 +53,7 @@ public class History extends JPanel {
         gbcButton1.anchor = GridBagConstraints.SOUTHWEST; 
 
         button1.setBackground(Color.WHITE);
-        button1.setForeground(new Color(0, 0, 102)); //Set text color to black
+        button1.setForeground(new Color(0, 0, 102));//Set text color to black
         
         GridBagConstraints gbcMessage = new GridBagConstraints();
         gbcMessage.gridx = 0; 
@@ -76,7 +76,6 @@ public class History extends JPanel {
         button1.addActionListener(e -> {
             frame.dispose();  //Close the panel when the button is pressed
             waits[0] = true;
-
         });
     }
 
