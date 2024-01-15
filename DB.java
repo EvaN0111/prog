@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public class DB {
     private static Connection con = null;
     public static Connection openConnection() {
-        // establish a connection with the database sqlite and handle exceptions
+        // establish a connection with the database
         Connection dbcon = null;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -24,7 +24,7 @@ public class DB {
         return dbcon;
     }
     public static void createTables(Connection con) {
-        //create database tables: input , genres, users and playlists
+        //create database tables
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Input (" +
                                "UserName VARCHAR(255) NOT NULL PRIMARY KEY," +
@@ -97,6 +97,13 @@ public class DB {
             }
         } catch (SQLException e) {
             System.out.println("Could not close the SQL statement: " + e.getMessage());
-        }
+        }     
     }
 }
+
+
+
+
+
+
+
