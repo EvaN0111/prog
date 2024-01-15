@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public class DB {
     private static Connection con = null;
     public static Connection openConnection() {
-        // establish a connection with the database
+        // establish a connection with the database sqlite and handle exceptions
         Connection dbcon = null;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -24,7 +24,7 @@ public class DB {
         return dbcon;
     }
     public static void createTables(Connection con) {
-        //create database tables
+        //create database tables: input , genres, users and playlists
         try (Statement stmt = con.createStatement()) {
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Input (" +
                                "UserName VARCHAR(255) NOT NULL PRIMARY KEY," +

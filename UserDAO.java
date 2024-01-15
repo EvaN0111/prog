@@ -16,12 +16,14 @@ public class UserDAO {
             stmt.setString(1, UserName);
             stmt.setString(2, Password);
             ResultSet rs = stmt.executeQuery();
+            // the user data are incorrect
             if (!rs.next()) {
                 rs.close();
                 stmt.close();
                 DB.close();
                 login = false;
                 return login;
+            // the user data are correct
             } else {
                 rs.close();
                 stmt.close();
@@ -31,6 +33,7 @@ public class UserDAO {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         } finally {
+            // close connetion to the db
             try {
                 DB.close();
             } catch (Exception e) {
