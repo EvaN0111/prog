@@ -24,13 +24,14 @@ public class Main {
 
         // initialize all the necessary variables
         final int[] a11 = new int[1];
-
+        final JFrame frame21 = new JFrame("~MusiVerse~");
         boolean[] waits = { false };
         String answer2 = "";
         int a2 = 0;
         int tm = 0;
         String fn, psi, un, psu, gn, dec, mood;
         boolean yn = false;
+        boolean stat = false;
         String namefinal = null;
         String fullfinal = null;
         String passfinal = null;
@@ -51,21 +52,20 @@ public class Main {
 
         // show the backround panel
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("~MusiVerse~");
 
             // Set the size to cover the whole screen
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            frame.setSize(screenSize);
+            frame21.setSize(screenSize);
 
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+            frame21.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame21.getContentPane().setBackground(Color.LIGHT_GRAY);
 
             JLabel label = new JLabel("MusiVerse");
             label.setForeground(Color.WHITE); // Set text color
-            label.setFont(new Font("Arial", Font.PLAIN, 300)); // Set font and size
-            frame.add(label);
+            label.setFont(new Font("Arial", Font.PLAIN, 250)); // Set font and size
+            frame21.add(label);
 
-            frame.setVisible(true);
+            frame21.setVisible(true);
         });
 
         // show the welcome panel
@@ -209,8 +209,13 @@ public class Main {
             genrecount = count.MGen(namefinal);
 
             // ask user what feature they would like to use with the appropriate panel
+            if (!stat) {
             GraphFeat graphFeat = new GraphFeat();
             a2 = graphFeat.getChoice();
+            } else {
+                GraphFeat2 graphFeat2 = new GraphFeat2();
+            a2 = graphFeat2.getChoice();
+            }
 
             // new playlist
             if (a2 == 1) {
@@ -311,6 +316,7 @@ public class Main {
             } else if (a2 == 2) {
                 // Statistics' Diagrams
                 Application.launch(Counters.class);
+                stat = true;
 
                 // genre count and history
             } else if (a2 == 3) {
@@ -373,6 +379,7 @@ public class Main {
                             @Override
                             public void windowClosing(WindowEvent e) {
                                 frame.dispose();
+                                frame21.dispose();
                             }
                         });
 
