@@ -2,9 +2,9 @@ package gr.aueb.dmst.ecg.eprog;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
+//import java.awt.image.BufferedImage;
+//import java.io.File;
+//import javax.imageio.ImageIO;
 
 public class GraphWelcome {
 
@@ -14,8 +14,8 @@ public class GraphWelcome {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Add an icon
-        ImageIcon noteIcon = createImageIcon("C:\\ASOEE\\3o Examino\\java\\ergasia\\note2.png");
-        JLabel iconLabel = new JLabel(noteIcon);
+        //ImageIcon noteIcon = createImageIcon("C:\\ASOEE\\3o Examino\\java\\ergasia\\note2.png");
+        //JLabel iconLabel = new JLabel(noteIcon);
 
         // Add a label with custom color
         JLabel label = new JLabel("Enter your Username:");
@@ -25,7 +25,7 @@ public class GraphWelcome {
     
 
         // Add components to the panel
-        panel.add(iconLabel);
+        //panel.add(iconLabel);
         panel.add(label);
 
         // Show the input dialog
@@ -49,10 +49,11 @@ public class GraphWelcome {
         // Create a custom panel
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
 
         // Add an icon
-        ImageIcon noteIcon = createImageIcon("C:\\ASOEE\\3o Examino\\java\\ergasia\\note2.png");
-        JLabel iconLabel = new JLabel(noteIcon);
+        //ImageIcon noteIcon = createImageIcon("C:\\ASOEE\\3o Examino\\java\\ergasia\\note2.png");
+        //JLabel iconLabel = new JLabel(noteIcon);
 
         // Add a label with custom color
         JLabel label = new JLabel("Enter your Password:");
@@ -62,7 +63,7 @@ public class GraphWelcome {
     
 
         // Add components to the panel
-        panel.add(iconLabel);
+        //panel.add(iconLabel);
         panel.add(label);
 
         // Show the input dialog
@@ -89,8 +90,8 @@ public class GraphWelcome {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Add an icon
-        ImageIcon noteIcon = createImageIcon("C:\\ASOEE\\3o Examino\\java\\ergasia\\note2.png");
-        JLabel iconLabel = new JLabel(noteIcon);
+        //ImageIcon noteIcon = createImageIcon("C:\\ASOEE\\3o Examino\\java\\ergasia\\note2.png");
+        //JLabel iconLabel = new JLabel(noteIcon);
 
         // Add a label with custom color
         JLabel label = new JLabel("Enter your Full Name:");
@@ -100,7 +101,7 @@ public class GraphWelcome {
     
 
         // Add components to the panel
-        panel.add(iconLabel);
+        //panel.add(iconLabel);
         panel.add(label);
 
         // Show the input dialog
@@ -120,7 +121,7 @@ public class GraphWelcome {
         return fullname;
     }
 
-    private static ImageIcon createImageIcon(String path) {
+    /**private static ImageIcon createImageIcon(String path) {
         try {
             File file = new File(path);
             BufferedImage image = ImageIO.read(file);
@@ -129,5 +130,5 @@ public class GraphWelcome {
             e.printStackTrace();
             return null;
         }
-    }
+    }*/
 }
