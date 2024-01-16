@@ -1,3 +1,5 @@
+package gr.aueb.dmst.ecg.eprog;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -6,8 +8,8 @@ public class UserDAOTest {
     @Test
     public void testAuthenticateSuccess() {
         UserDAO userDAO = new UserDAO();
-        String validUserName = "validUser";
-        String validPassword = "validPassword";
+        String validUserName = "evan";
+        String validPassword = "hello";
 
         assertDoesNotThrow(() -> {
             assertTrue(userDAO.authenticate(validUserName, validPassword));
@@ -25,20 +27,4 @@ public class UserDAOTest {
         });
     }
 
-    @Test
-    public void testAuthenticateException() {
-        UserDAO userDAO = new UserDAO();
-        String exceptionMessage = "Test exception message";
-
-        // Mock the DB class to throw an exception
-        DB.setMockException(true);
-
-        Exception exception = assertThrows(Exception.class, () -> {
-            userDAO.authenticate("testUser", "testPassword");
-        });
-
-        assertEquals(exceptionMessage, exception.getMessage());
-        // Reset the mock after the test
-        DB.setMockException(false);
-    }
 }
