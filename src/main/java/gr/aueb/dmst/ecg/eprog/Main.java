@@ -7,6 +7,9 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.*;
+
+import gr.aueb.dmst.ecg.eprog.AIModel.AIException;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -272,11 +275,12 @@ public class Main {
                     try {
                         // Pass the data to the AI and display the suggested playlist.
 
-                        AIModel openai = new AIModel(/* input */);
+                        AIModel openai = new AIModel();
                         String genlist = openai.genAnswer(gn, mood, dec);
-                        openai.StringToList(genlist);
-                        final String[] playlist = openai.songSeperator(genlist);
-
+                        
+                        String[] playlist ;
+                        playlist = openai.songSeperator(genlist);
+                        
                         SwingUtilities.invokeLater(() -> {
                             JFrame frame = new JFrame("MusiVerse App");
                             frame.setUndecorated(true);
@@ -284,7 +288,6 @@ public class Main {
 
                             Showlist showl = new Showlist(frame, playlist, waits);
                             frame.add(showl);
-
                             frame.setSize(600, 500);
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);
@@ -308,7 +311,7 @@ public class Main {
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.err.println("Error while connectiong with the AI");
+                        System.err.println("Error with formatting answer");
                     }
                 } while (answer2.equals("Yes"));
 
