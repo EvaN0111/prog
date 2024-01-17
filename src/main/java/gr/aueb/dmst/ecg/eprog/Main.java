@@ -7,9 +7,6 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.*;
-
-import gr.aueb.dmst.ecg.eprog.AIModel.AIException;
-
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -66,7 +63,18 @@ public class Main {
             JLabel label = new JLabel("MusiVerse");
             label.setForeground(Color.WHITE); // Set text color
             label.setFont(new Font("Arial", Font.PLAIN, 250)); // Set font and size
-            frame21.add(label);
+            GridBagLayout layout = new GridBagLayout();
+            frame21.setLayout(layout);
+
+            // Create GridBagConstraints to center the label
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.weightx = 1.0; // 100% of available horizontal space
+            gbc.weighty = 1.0; // 100% of available vertical space
+            gbc.anchor = GridBagConstraints.CENTER;
+
+            frame21.add(label, gbc);
 
             frame21.setVisible(true);
         });
@@ -213,11 +221,11 @@ public class Main {
 
             // ask user what feature they would like to use with the appropriate panel
             if (!stat) {
-            GraphFeat graphFeat = new GraphFeat();
-            a2 = graphFeat.getChoice();
+                GraphFeat graphFeat = new GraphFeat();
+                a2 = graphFeat.getChoice();
             } else {
                 GraphFeat2 graphFeat2 = new GraphFeat2();
-            a2 = graphFeat2.getChoice();
+                a2 = graphFeat2.getChoice();
             }
 
             // new playlist
@@ -275,12 +283,10 @@ public class Main {
                     try {
                         // Pass the data to the AI and display the suggested playlist.
 
-                        AIModel openai = new AIModel();
+                        AIModel openai = new AIModel(/* input */);
                         String genlist = openai.genAnswer(gn, mood, dec);
-                        
-                        String[] playlist ;
-                        playlist = openai.songSeperator(genlist);
-                        
+                        final String[] playlist = openai.songSeperator(genlist);
+
                         SwingUtilities.invokeLater(() -> {
                             JFrame frame = new JFrame("MusiVerse App");
                             frame.setUndecorated(true);
@@ -288,6 +294,7 @@ public class Main {
 
                             Showlist showl = new Showlist(frame, playlist, waits);
                             frame.add(showl);
+
                             frame.setSize(600, 500);
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);
@@ -311,7 +318,7 @@ public class Main {
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.err.println("Error with formatting answer");
+                        System.err.println("Error while connectiong with the AI");
                     }
                 } while (answer2.equals("Yes"));
 
