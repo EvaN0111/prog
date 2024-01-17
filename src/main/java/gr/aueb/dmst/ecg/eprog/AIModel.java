@@ -8,15 +8,13 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiTokenizer;
 import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AIModel {
     public ChatMemory chatMemory;
     // use api key
     String apikey = System.getenv("API_KEY");
 
-    public String genAnswer(String in_g, String in_oc, String in_d) {
+    public String genAnswer(String in_g, String in_oc, String in_d) throws AIException {
         AiMessage answer = null;
         do {
             try {
@@ -32,8 +30,11 @@ public class AIModel {
 
                 // get message from AI
                 answer = model.generate(chatMemory.messages()).content();
+                if (answer == null) {
+                    throw new AIException("AI didnt provide answer");
+                }
                 chatMemory.add(answer);
-            } catch (Exception e) {
+            } catch (AIException e) {
                 e.printStackTrace();
             }
         } while (answer == null);
@@ -41,48 +42,33 @@ public class AIModel {
 
     }
 
-    public void StringToList(String str) {
-
-        // Define the pattern for digit followed by a dot and a single alphabet
-        // character
-        Pattern pattern = Pattern.compile("(\\d+)\\.([a-zA-Z])");
-
-        // Create a matcher object
-        Matcher matcher = pattern.matcher(str);
-
-        // Find all matches and print them in the specified format
-        while (matcher.find()) {
-            // Print the matched groups in the desired format
-            System.out.println(matcher.group(1) + "." + matcher.group(2));
+    // gets string from ai
+    public String[] songSeperator(String str) throws Exception {
+        String[] playlist = new String[10];
+        for (int i=0 ; i < 10 ; i++) {
+            playlist[i] = "";
         }
-
+        try {
+        
+            playlist = str.split("[\\n\\r]+", 10);
+            if (playlist[0] == null) {
+                throw new Exception();
+            } else {
+                return playlist;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            playlist[0] = "";
+            return playlist;
+        }
     }
 
-    // gets string from ai
-    public String[] songSeperator(String str) {
+    public class AIException extends Exception {
+        public AIException() {
 
-        // Define the pattern for extracting title and artist
-        Pattern pattern = Pattern.compile("\\d+\\. \"(.+)\" by (.+)");
-
-        // Create a matcher object
-        Matcher matcher = pattern.matcher(str);
-
-        // Create an array to store songs
-        String[] playlist = new String[10];
-
-        // Process each match and store in the array
-        int i = 0;
-        while (matcher.find() && i < 10) {
-            String title = matcher.group(1);
-            String artist = matcher.group(2);
-            playlist[i] = title + " by " + artist;
-            i++;
         }
-        if (playlist[1] != null) {
-            return playlist;
-        } else {
-            System.out.println("error null playlist");
-            return playlist;
+        public AIException(String a) {
+            super(a);
         }
     }
 }
