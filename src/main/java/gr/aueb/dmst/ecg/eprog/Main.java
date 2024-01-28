@@ -10,11 +10,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 import javafx.application.Application;
-
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
         Scanner s1 = new Scanner(System.in);
         Scanner s3 = new Scanner(System.in);
         Scanner s4 = new Scanner(System.in);
@@ -24,7 +28,7 @@ public class Main {
 
         // initialize all the necessary variables
         final int[] a11 = new int[1];
-        
+
         boolean[] waits = { false };
         String answer2 = "";
         int a2 = 0;
@@ -40,6 +44,7 @@ public class Main {
         String[] moodall = { "Workout", "Party", "Studying", "Sleep", "Chill" };
 
         Map<String, Integer> genrecount = new HashMap<>();
+        System.setProperty("java.awt.headless", "false");
 
         // establish a connection with the database
         try {
@@ -51,50 +56,60 @@ public class Main {
         }
 
         // show the backround panel
-        SwingUtilities.invokeLater(() -> {
+        if (GraphicsEnvironment.isHeadless()) {
+            System.out.println("Running in a headless environment. Unable to create GUI.");
+            // Handle headless environment (e.g., log a warning, use a different approach)
+        } else {
+            SwingUtilities.invokeLater(() -> {
 
-            // Set the size to cover the whole screen
-            final JFrame frame21 = new JFrame("~MusiVerse~");
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            frame21.setSize(screenSize);
+                // Set the size to cover the whole screen
+                final JFrame frame21 = new JFrame("~MusiVerse~");
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                frame21.setSize(screenSize);
 
-            frame21.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame21.getContentPane().setBackground(Color.LIGHT_GRAY);
+                frame21.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame21.getContentPane().setBackground(Color.LIGHT_GRAY);
 
-            JLabel label = new JLabel("MusiVerse");
-            label.setForeground(Color.WHITE); // Set text color
-            label.setFont(new Font("Arial", Font.PLAIN, 250)); // Set font and size
-            GridBagLayout layout = new GridBagLayout();
-            frame21.setLayout(layout);
+                JLabel label = new JLabel("MusiVerse");
+                label.setForeground(Color.WHITE); // Set text color
+                label.setFont(new Font("Arial", Font.PLAIN, 250)); // Set font and size
+                GridBagLayout layout = new GridBagLayout();
+                frame21.setLayout(layout);
 
-            // Create GridBagConstraints to center the label
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.weightx = 1.0; // 100% of available horizontal space
-            gbc.weighty = 1.0; // 100% of available vertical space
-            gbc.anchor = GridBagConstraints.CENTER;
+                // Create GridBagConstraints to center the label
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1.0; // 100% of available horizontal space
+                gbc.weighty = 1.0; // 100% of available vertical space
+                gbc.anchor = GridBagConstraints.CENTER;
 
-            frame21.add(label, gbc);
+                frame21.add(label, gbc);
 
-            frame21.setVisible(true);
-        });
+                frame21.setVisible(true);
+            });
+        }
 
         // show the welcome panel
         try {
             // colors
-            SwingUtilities.invokeLater(() -> {
-                JFrame frame = new JFrame("MusiVerse App");
-                frame.setUndecorated(true);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            if (GraphicsEnvironment.isHeadless()) {
+                System.out.println("Running in a headless environment. Unable to create GUI.");
+                // Handle headless environment (e.g., log a warning, use a different approach)
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    JFrame frame = new JFrame("MusiVerse App");
+                    frame.setUndecorated(true);
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                WelcomePanel welcomePanel = new WelcomePanel(frame);
-                frame.add(welcomePanel);
+                    WelcomePanel welcomePanel = new WelcomePanel(frame);
+                    frame.add(welcomePanel);
 
-                frame.setSize(400, 300);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            });
+                    frame.setSize(400, 300);
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                });
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -185,18 +200,23 @@ public class Main {
 
         try {
             // show 'you have logged-in' panel
-            SwingUtilities.invokeLater(() -> {
-                JFrame frame = new JFrame("MusiVerse App");
-                frame.setUndecorated(true);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            if (GraphicsEnvironment.isHeadless()) {
+                System.out.println("Running in a headless environment. Unable to create GUI.");
+                // Handle headless environment (e.g., log a warning, use a different approach)
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    JFrame frame = new JFrame("MusiVerse App");
+                    frame.setUndecorated(true);
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                LogInPanel welcomePanel = new LogInPanel(frame);
-                frame.add(welcomePanel);
+                    LogInPanel welcomePanel = new LogInPanel(frame);
+                    frame.add(welcomePanel);
 
-                frame.setSize(500, 300);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            });
+                    frame.setSize(500, 300);
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                });
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error while showing the log in panel");
@@ -288,20 +308,25 @@ public class Main {
                         String genlist = openai.genAnswer(gn, mood, dec);
                         final String[] playlist = openai.songSeperator(genlist);
 
-                        SwingUtilities.invokeLater(() -> {
-                            JFrame frame = new JFrame("MusiVerse App");
-                            frame.setUndecorated(true);
-                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        if (GraphicsEnvironment.isHeadless()) {
+                            System.out.println("Running in a headless environment. Unable to create GUI.");
+                            // Handle headless environment (e.g., log a warning, use a different approach)
+                        } else {
+                            SwingUtilities.invokeLater(() -> {
+                                JFrame frame = new JFrame("MusiVerse App");
+                                frame.setUndecorated(true);
+                                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                            Showlist showl = new Showlist(frame, playlist, waits);
-                            frame.add(showl);
+                                Showlist showl = new Showlist(frame, playlist, waits);
+                                frame.add(showl);
 
-                            frame.setSize(600, 500);
-                            frame.setLocationRelativeTo(null);
-                            frame.setVisible(true);
-                            latch.countDown();
+                                frame.setSize(600, 500);
+                                frame.setLocationRelativeTo(null);
+                                frame.setVisible(true);
+                                latch.countDown();
 
-                        });
+                            });
+                        }
 
                         while (waits[0] == false) {
                             try {
@@ -337,19 +362,24 @@ public class Main {
 
                 // History of previous genres
                 try {
-                    SwingUtilities.invokeAndWait(() -> {
-                        JFrame frame = new JFrame("MusiVerse App");
-                        frame.setUndecorated(true);
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    if (GraphicsEnvironment.isHeadless()) {
+                        System.out.println("Running in a headless environment. Unable to create GUI.");
+                        // Handle headless environment (e.g., log a warning, use a different approach)
+                    } else {
+                        SwingUtilities.invokeAndWait(() -> {
+                            JFrame frame = new JFrame("MusiVerse App");
+                            frame.setUndecorated(true);
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                        History welcomePanel = new History();
-                        welcomePanel.history2(frame, genrecount2, queue, waits);
-                        frame.add(welcomePanel);
+                            History welcomePanel = new History();
+                            welcomePanel.history2(frame, genrecount2, queue, waits);
+                            frame.add(welcomePanel);
 
-                        frame.setSize(800, 500);
-                        frame.setLocationRelativeTo(null);
-                        frame.setVisible(true);
-                    });
+                            frame.setSize(800, 500);
+                            frame.setLocationRelativeTo(null);
+                            frame.setVisible(true);
+                        });
+                    }
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -374,26 +404,31 @@ public class Main {
             if (a2 == 4) {
                 try {
                     // show Goodbye panel
-                    SwingUtilities.invokeLater(() -> {
-                        JFrame frame = new JFrame("MusiVerse App");
-                        frame.setUndecorated(true);
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    if (GraphicsEnvironment.isHeadless()) {
+                        System.out.println("Running in a headless environment. Unable to create GUI.");
+                        // Handle headless environment (e.g., log a warning, use a different approach)
+                    } else {
+                        SwingUtilities.invokeLater(() -> {
+                            JFrame frame = new JFrame("MusiVerse App");
+                            frame.setUndecorated(true);
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                        LogOutPanel welcomePanel = new LogOutPanel(frame);
-                        frame.add(welcomePanel);
+                            LogOutPanel welcomePanel = new LogOutPanel(frame);
+                            frame.add(welcomePanel);
 
-                        frame.setSize(600, 400);
-                        frame.setLocationRelativeTo(null);
-                        frame.setVisible(true);
+                            frame.setSize(600, 400);
+                            frame.setLocationRelativeTo(null);
+                            frame.setVisible(true);
 
-                        frame.addWindowListener(new WindowAdapter() {
-                            @Override
-                            public void windowClosing(WindowEvent e) {
-                                frame.dispose();
-                            }
+                            frame.addWindowListener(new WindowAdapter() {
+                                @Override
+                                public void windowClosing(WindowEvent e) {
+                                    frame.dispose();
+                                }
+                            });
+
                         });
-
-                    });
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("error while printing the Goodbye panel");
