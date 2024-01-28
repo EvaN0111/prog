@@ -24,7 +24,7 @@ public class Main {
 
         // initialize all the necessary variables
         final int[] a11 = new int[1];
-        final JFrame frame21 = new JFrame("~MusiVerse~");
+        
         boolean[] waits = { false };
         String answer2 = "";
         int a2 = 0;
@@ -54,6 +54,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
 
             // Set the size to cover the whole screen
+            final JFrame frame21 = new JFrame("~MusiVerse~");
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             frame21.setSize(screenSize);
 
@@ -389,7 +390,6 @@ public class Main {
                             @Override
                             public void windowClosing(WindowEvent e) {
                                 frame.dispose();
-                                frame21.dispose();
                             }
                         });
 
