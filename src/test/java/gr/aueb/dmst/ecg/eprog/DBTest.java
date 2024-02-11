@@ -1,3 +1,5 @@
+package gr.aueb.dmst.ecg.eprog;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.sql.Connection;
