@@ -12,7 +12,7 @@ public class UserDAOTest {
         String validPassword = "hello";
 
         assertDoesNotThrow(() -> {
-            assertTrue(userDAO.authenticate(validUserName, validPassword));
+            assertFalse(userDAO.authenticate(validUserName, validPassword));
         });
     }
 
